@@ -201,22 +201,22 @@ void Game::printLastTurn()
     // Alice played Jack of Clubs Bob played King of Diamonds. Bob wins.
     if (turns_index == 0)
     {
-        cout << "didn't play yet";
+        cout << "didn't play yet" << endl;
     }
     else
     {
-        cout << turns[turns_index - 1];
+        cout << turns[turns_index - 1] << endl;
     }
 }
 void Game::printWiner() // prints the name of the winning player can be used also to find who is the current winner(who has more cards at the moment)
 {
     if (player1.cardesTaken() > player2.cardesTaken())
     {
-        cout << player1.getName();
+        cout << "winner : " << player1.getName() << endl ;
     }
     else if (player1.cardesTaken() < player2.cardesTaken())
     {
-        cout << player2.getName();
+        cout << "winner : " << player2.getName() << endl ;
     }
     else
     {
@@ -245,8 +245,8 @@ void Game::printStats() // for each player prints basic statistics: win rate, ca
 
     // Table rows
     std::cout << std::left << std::setw(25) << "Win rate"
-              << std::setw(15) << std::setprecision(2) << (player1.getWins() / turns_index)
-              << std::setw(15) << std::setprecision(2) << (player2.getWins() / turns_index)
+              << std::setw(15) << std::setprecision(2) << (double(player1.getWins()) / turns_index)
+              << std::setw(15) << std::setprecision(2) << (double(player2.getWins()) / turns_index)
               << std::endl;
 
     std::cout << std::left << std::setw(25) << "Wins"

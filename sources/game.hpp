@@ -7,9 +7,10 @@ using namespace std;
 
 namespace ariel{
 
-}
     constexpr int CARDS_AMOUNT = 52;
     constexpr int MAX_TURNS_POSSIBLE = 26;
+}
+using namespace ariel;
     /// @brief - In part 2 I will try to first "shuffle" the cards and then split the pack to the players
     class Game{
 
