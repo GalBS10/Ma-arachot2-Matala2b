@@ -6,26 +6,24 @@
 using namespace std;
 
 namespace ariel{
-
     constexpr int CARDS_AMOUNT = 52;
     constexpr int MAX_TURNS_POSSIBLE = 26;
 }
 using namespace ariel;
-    /// @brief - In part 2 I will try to first "shuffle" the cards and then split the pack to the players
+
     class Game{
 
         public:
             Player& player1;
             Player& player2;
             //int pack [PACK_SIZE];
-            array<Card, CARDS_AMOUNT> pack;//52/4. every card in the pack is there 4 time(without regards to the signs(heart,diamond etc)).
-            //each cell will hold the amount of cards with the same value. as i said if it worked properly should be 4.
-            stack<Card> cards_on_table;
-            array<string,MAX_TURNS_POSSIBLE> turns;
-            size_t turns_index;
+            array<Card, CARDS_AMOUNT> pack;//the main deck of cards. we split the cards to the players from this deck.
+            stack<Card> cards_on_table;// this stack is used in each turn. the player who won get all the cards in this stack.
+            array<string,MAX_TURNS_POSSIBLE> turns;// holds all the turn that played.
+            size_t turns_index;// the index for
 
-            Game();
-            Game(Player& player1, Player& player2);
+           // Game();
+            Game(Player& player1, Player& player2);//constructor
 
             string getP1();
             string getP2();

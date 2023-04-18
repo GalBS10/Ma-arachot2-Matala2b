@@ -9,12 +9,14 @@ class Player{
 
     
     string name;
-    bool is_playing;
+    bool is_playing;//a flag that indicate if the player is playing or not.
+    //stats of the player
     size_t draws;
     size_t wins;
     size_t loses;
-    stack<Card> card_stack;
-    stack<Card> cards_won;
+
+    stack<Card> card_stack;//holds the cards he get at the start of the game.
+    stack<Card> cards_won;//holds the cards he won in the game.
     public:
         //constructor
         Player ();

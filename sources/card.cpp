@@ -3,12 +3,17 @@
 #include "string"
 
 
-Card:: Card(){
+Card:: Card(){ //default constructor
     s_value = "0";
     i_value =0;
     sign = null;
 }
-Card:: Card(int _value, Sign _sign){
+
+/// @brief - giving each value a name in order to print it in the turn
+/// @param _value  - the int value in order to compare between the cards.
+/// @param _sign  - the sign of the card.
+/// @param s_value - the name of the card.
+Card:: Card(int _value, Sign _sign){//constructor
     if(_value==11)
     {
         s_value = "Jack";
@@ -35,6 +40,8 @@ Card:: Card(int _value, Sign _sign){
     sign = _sign;
 }
 
+/// @brief - turnind the card info into a string in order to print it.
+/// @return - the string that describe the card.
 string Card:: to_string(){
     string s= "";
     if(sign == Heart){
@@ -54,6 +61,13 @@ string Card:: to_string(){
 
 }
 
+/// @brief - in order to know who won in teach round we need to compare the cards and by the rules of the game
+// we return the right value.
+/// @param card2 - the card we compare "this" to.
+/// @return - returning an int.
+/// 1 - "this" card won .
+/// -1 - card2 won.
+/// 0 - equal.
 int Card:: compare(Card card2){
 
     if(i_value == 1 && card2.i_value == 2){ //Ace vs. 2 = lose

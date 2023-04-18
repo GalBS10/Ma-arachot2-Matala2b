@@ -10,17 +10,22 @@
 
 // }
 
+/// @brief - a constructor foe Game, here we set all we need in order tp start the game.
+/// @param p1 - a reference to a player which will play the game.
+/// @param p2 - a reference to a player which will play the game.
+
 Game::Game(Player &p1, Player &p2) : player1(p1), player2(p2)
 {
     try
     {
-        if (p1.getIs_playing() || p2.getIs_playing())
+        if (p1.getIs_playing() || p2.getIs_playing())//checking if one of the players is allready in game. 
         {
             throw runtime_error("ERROR - one or more of the player is still playing");
         }
+        //initializiation
         cards_on_table = stack<Card>();
-        player1.set_is_playing();
-        player2.set_is_playing();
+        player1.set_is_playing();//changing the player state to "playing".
+        player2.set_is_playing();//changing the player state to "playing".
         turns_index = 0;
 
         for (size_t i = 0; i < 5; i++) // generating the turns array.
@@ -51,6 +56,10 @@ Game::Game(Player &p1, Player &p2) : player1(p1), player2(p2)
     }
 }
 
+/// @brief - a side function that split the cards between 2 players diffrently on each run.
+/// @param pack - holding the cards.
+/// @param player_1 - the first player.
+/// @param player_2 - the second player.
 void Game::split_stack(array<Card, 52> pack, Player &player_1, Player &player_2)
 {
     vector<int> nums(52); // Initialize vector of integers from 0 to 51
@@ -60,9 +69,9 @@ void Game::split_stack(array<Card, 52> pack, Player &player_1, Player &player_2)
         nums[i] = i;
     }
     // Shuffle vector using std::shuffle and std::default_random_engine
-    std::random_device rd;
-    std::default_random_engine rng(rd());
-    std::shuffle(nums.begin(), nums.end(), rng);
+    std::random_device rd;//a random number which i use as a random seed each round for rng.
+    std::default_random_engine rng(rd());//is used to shuffle the cards.
+    std::shuffle(nums.begin(), nums.end(), rng);//rearranging the nums container in random way.
 
     for (size_t i = 0; i < 52; i++) // giving the cards to the players from random places in the pack of cards.
     {
@@ -77,14 +86,19 @@ void Game::split_stack(array<Card, 52> pack, Player &player_1, Player &player_2)
     }
 }
 
+/// @brief - side function
+/// @return - the name of player 1.
 string Game::getP1()
 {
     return player1.getName();
 }
-string Game::getP2()
+string Game::getP2()//same as getp1.
 {
     return player2.getName();
 }
+
+/// @brief - side function for playTurn. the name says it all.
+/// @param player - the player who won the cards.
 void Game::empty_cards_on_table(Player &player)
 {
     while (!cards_on_table.empty())
@@ -94,35 +108,43 @@ void Game::empty_cards_on_table(Player &player)
     }
 }
 
+/// @brief - the main function of Game. with this function we can run each turn and play the game.
 void Game::playTurn()
 {
-    if (!(player1.getIs_playing() && player2.getIs_playing()))
+    if (!(player1.getIs_playing() && player2.getIs_playing()))//checking if the game isn't finished yet.
     {
         throw runtime_error("ERROR - The players already finished the game");
     }
-    bool loop = true;
+    bool loop = true;//helps us to stop the loop.
+    //these will help us to save the turn we played as a string.
     string s1 = "";
     string s2 = "";
     string ans = "";
 
     while (loop)
     {
-        s1 = player1.getName() + " played " + player1.getCard_stack().top().to_string() + ", ";
-        s2 = player2.getName() + " played " + player2.getCard_stack().top().to_string() + ". ";
-        if (player1.getCard_stack().top().compare(player2.getCard_stack().top()) == 1)
+        s1 = player1.getName() + " played " + player1.getCard_stack().top().to_string() + ", ";//saving what p1 played as a string
+        s2 = player2.getName() + " played " + player2.getCard_stack().top().to_string() + ". ";//saving what p2 played as a string
+        if (player1.getCard_stack().top().compare(player2.getCard_stack().top()) == 1)//if p1 won.
         {
-            player1.getCards_won().push(player1.getCard_stack().top());
-            player1.getCards_won().push(player2.getCard_stack().top());
-            empty_cards_on_table(player1);
-            ans += s1 + s2 + player1.getName() + " wins.";
+            player1.getCards_won().push(player1.getCard_stack().top());//giving what p1 played to p1
+            player1.getCards_won().push(player2.getCard_stack().top());//giving what p2 played to p1
+            empty_cards_on_table(player1);//if there was no draw this is empty.
+            ans += s1 + s2 + player1.getName() + " wins.";//saving the turn we plyed as a string.
+
+            //removing the cards we played from the players card stack.
             player1.getCard_stack().pop();
             player2.getCard_stack().pop();
+
+            //changing the stats of the game.
             player1.increaseWins();
             player2.increaseLoses();
+            //if somenoe won we finished the turn.
             loop = false;
         }
-        else if (player1.getCard_stack().top().compare(player2.getCard_stack().top()) == -1)
+        else if (player1.getCard_stack().top().compare(player2.getCard_stack().top()) == -1)//if p2 won.
         {
+            //same as above.
             player2.getCards_won().push(player2.getCard_stack().top());
             player2.getCards_won().push(player1.getCard_stack().top());
             empty_cards_on_table(player2);
@@ -133,20 +155,25 @@ void Game::playTurn()
             player1.increaseLoses();
             loop = false;
         }
-        else if (player1.getCard_stack().top().compare(player2.getCard_stack().top()) == 0)
+        else if (player1.getCard_stack().top().compare(player2.getCard_stack().top()) == 0)//draw.
         {
+            //changing the stats of the game.
             player1.increaseDraws();
             player2.increaseDraws();
+
+            //puting the cards we played on the table.
             cards_on_table.push(player1.getCard_stack().top());
             cards_on_table.push(player2.getCard_stack().top());
 
             ans += s1 + s2 + "Draw. ";
 
+            //removing the cards we played from the players card stack.
             player1.getCard_stack().pop();
             player2.getCard_stack().pop();
 
-            if (player1.stacksize() == 0 || player2.stacksize() == 0)
+            if (player1.stacksize() == 0 || player2.stacksize() == 0)//cheking if the players got out of cards.
             {
+                //if they do we split the cards on the table equaly between them.
                 int i = 0;
                 while (!cards_on_table.empty())
                 {
@@ -163,13 +190,16 @@ void Game::playTurn()
                 }
                 break;
             }
+            //if they still have cards we put an upsidedown card on the table
             cards_on_table.push(player1.getCard_stack().top());
             cards_on_table.push(player2.getCard_stack().top());
 
-            player1.getCard_stack().pop(); // for putting a upside down card
+            player1.getCard_stack().pop();
             player2.getCard_stack().pop();
-            if (player1.stacksize() == 0 || player2.stacksize() == 0)
-            {
+            if (player1.stacksize() == 0 || player2.stacksize() == 0)//cheking agian if the players got out of cards 
+            {                                                       //because they need one more card each to play.
+
+                //same as the if before. 
                 int i = 0;
                 while (!cards_on_table.empty())
                 {
@@ -186,9 +216,11 @@ void Game::playTurn()
                 }
                 break;
             }
+            //if they still have cards we continue the loop.
 
         }
     }
+    //entering the turn we played to turns and increasing the index.
     turns[turns_index] = ans;
     turns_index++;
 }
@@ -229,7 +261,7 @@ void Game::playAll() // playes the game untill the end
     {
         playTurn();
     }
-    player1.set_is_playing(); // setting is_palying to false;
+    player1.set_is_playing(); // setting is_palying to false because the game is finished.
     player2.set_is_playing();
 }
 void Game::printLog() // prints all the turns played one line per turn (same format as game.printLastTurn())

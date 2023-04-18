@@ -1,7 +1,7 @@
 #include "player.hpp"
 #include "card.hpp"
 
-Player:: Player (){
+Player:: Player (){//default constructor.
     name = string("someone");
     is_playing = false;
     draws = 0;
@@ -10,7 +10,7 @@ Player:: Player (){
     card_stack = stack<Card>();
     cards_won = stack<Card>();
 }
-Player:: Player (string n){
+Player:: Player (string n){//constructor.
     name = string(n);
     is_playing = false;
     draws = 0;
